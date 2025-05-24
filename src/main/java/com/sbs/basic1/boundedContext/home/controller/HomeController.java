@@ -19,4 +19,16 @@ public class HomeController {
   public String showHomeMain() {
     return "반갑습니다.";
   }
+
+  @GetMapping("/home/main2")
+  @ResponseBody
+  public String showHomeMain2() {
+    return "어서오세요.";
+  }
+
+  @GetMapping("/home/main3")
+  @ResponseBody
+  public String showHomeMain3() {
+    return "스프링부트는 좋아요!!";
+  }
 }
