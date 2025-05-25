@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.net.http.HttpRequest;
+import java.util.*;
 
 @Controller
 // '개발자가 스프링부트한테 해당 클래스는 컨트롤러 클래스이다.'라고 전달
@@ -82,7 +83,7 @@ public class HomeController {
           .append(dan * i)
           .append("<br>"); // HTML 줄바꿈 태그
     }
-    
+
     // rs를 string 타입으로 변환
     return rs.toString();
   }
@@ -108,5 +109,78 @@ public class HomeController {
 
     // rs를 string 타입으로 변환
     return rs.toString();
+  }
+
+  @GetMapping("/home/returnBoolean")
+  @ResponseBody
+  public boolean showReturnBoolean() {
+    return true;
+  }
+
+  @GetMapping("/home/returnDouble")
+  @ResponseBody
+  public double showReturnDouble() {
+    return Math.PI;
+  }
+
+  @GetMapping("/home/returnArray")
+  @ResponseBody
+  public int[] showReturnArray() {
+    int[] arr = {10, 20, 30};
+
+    return arr;
+  }
+
+  @GetMapping("/home/returnList")
+  @ResponseBody
+  public List<Integer> showReturnList() {
+    // List<Integer> list = List.of(10, 20, 30);
+
+    /*
+    List<Integer> list = new ArrayList<>(){{
+      add(10);
+      add(20);
+      add(30);
+    }};
+    */
+
+    List<Integer> list = new ArrayList<>();
+    list.add(10);
+    list.add(20);
+    list.add(30);
+
+    return list;
+  }
+
+  @GetMapping("/home/returnMap")
+  @ResponseBody
+  public Map<String, Object> showReturnMap() {
+    /*
+    Map<String, Object> map = Map.of(
+        "id", 1,
+        "subject", "제목1",
+        "content", "내용1",
+        "writerName", "홍길순",
+        "articleNo", new ArrayList<>() {{
+          add(1);
+          add(2);
+          add(3);
+        }}
+    );
+     */
+
+    Map<String, Object> map = new LinkedHashMap<>() {{
+      put("id", 1);
+      put("subject", "제목1");
+      put("content", "내용1");
+      put("writerName", "홍길순");
+      put("articleNo", new ArrayList<>() {{
+        add(1);
+        add(2);
+        add(3);
+      }});
+    }};
+
+    return map;
   }
 }
