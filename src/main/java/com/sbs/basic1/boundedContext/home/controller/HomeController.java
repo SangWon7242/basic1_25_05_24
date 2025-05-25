@@ -63,4 +63,26 @@ public class HomeController {
     // 파라미터 값에 기본값을 주는 경우 @RequestParam(defaultValue = "0") 통해 기본값 지정이 가능하다.
     return a + b;
   }
+
+  @GetMapping("/home/gugudan")
+  @ResponseBody
+  public String showGugudan(
+      @RequestParam(defaultValue = "9") int dan,
+      @RequestParam(defaultValue = "9") int limit
+  ) {
+
+    StringBuilder rs = new StringBuilder();
+
+    for (int i = 1; i <= limit; i++) {
+      rs.append(dan)
+          .append(" * ")
+          .append(i)
+          .append(" = ")
+          .append(dan * i)
+          .append("\n");
+    }
+    
+    // rs를 string 타입으로 변환
+    return rs.toString();
+  }
 }
