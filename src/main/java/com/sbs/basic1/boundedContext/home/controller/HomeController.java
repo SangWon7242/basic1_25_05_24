@@ -1,7 +1,5 @@
 package com.sbs.basic1.boundedContext.home.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,16 +9,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.net.http.HttpRequest;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 // '개발자가 스프링부트한테 해당 클래스는 컨트롤러 클래스이다.'라고 전달
 public class HomeController {
-  int no;
+  private int no;
+  private List<Person> personList;
 
   public HomeController() {
     no = 0;
+    personList = new ArrayList<>();
   }
 
   @GetMapping("/home/main")
@@ -286,6 +288,23 @@ public class HomeController {
 
     return list;
   }
+
+  @GetMapping("/home/addPerson")
+  @ResponseBody
+  public String addPerson(String name, int age) {
+    Person p = new Person(name, age);
+    System.out.println("p : " + p);
+
+    personList.add(p);
+
+    return "%d번 사람이 추가되었습니다.".formatted(p.getId());
+  }
+
+  @GetMapping("/home/showPeople")
+  @ResponseBody
+  public List<Person> showPeople() {
+    return personList;
+  }
 }
 
 class Article {
@@ -364,4 +383,21 @@ class Article2 {
   private String content;
   private String writerName;
   private List<Integer> articleNo;
+}
+
+@AllArgsConstructor
+@Data
+class Person {
+  private static int lastId;
+  private final int id;
+  private final String name;
+  private final int age;
+
+  static {
+    lastId = 0;
+  }
+
+  public Person(String name, int age) {
+    this(++lastId, name, age);
+  }
 }
