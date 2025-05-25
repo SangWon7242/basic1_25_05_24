@@ -18,11 +18,11 @@ import java.util.Map;
 // '개발자가 스프링부트한테 해당 클래스는 컨트롤러 클래스이다.'라고 전달
 public class HomeController {
   private int no;
-  private List<Person> personList;
+  private List<Person> people;
 
   public HomeController() {
     no = 0;
-    personList = new ArrayList<>();
+    people = new ArrayList<>();
   }
 
   @GetMapping("/home/main")
@@ -289,21 +289,85 @@ public class HomeController {
     return list;
   }
 
+  @GetMapping("/home/personTestcase")
+  @ResponseBody
+  public String personTestcase() {
+    people.add(new Person("홍길동", 11));
+    people.add(new Person("홍길순", 22));
+    people.add(new Person("임꺽정", 33));
+    
+    return "테스트 케이스 추가";
+  }
+
   @GetMapping("/home/addPerson")
   @ResponseBody
   public String addPerson(String name, int age) {
     Person p = new Person(name, age);
     System.out.println("p : " + p);
 
-    personList.add(p);
+    people.add(p);
 
     return "%d번 사람이 추가되었습니다.".formatted(p.getId());
   }
 
+  @GetMapping("/home/removePerson")
+  @ResponseBody
+  public String removePerson(int id) {
+    /*
+    // v1
+    Person target = null;
+
+    for(Person p : people) {
+      if(p.getId() == id) {
+        target = p;
+        break;
+      }
+    }
+
+    if(target == null) {
+      return "%d번 사람이 존재하지 않습니다.".formatted(id);
+    }
+    people.remove(target);
+    */
+
+    // v2
+    /*
+    Person p = people.stream()
+        .filter(person -> person.getId() == id)
+        .findFirst()
+        .orElse(null);
+
+    people.remove(p);
+    */
+
+    // v3
+    boolean removed = people.removeIf(person -> person.getId() == id);
+    // 조건에 맞는 걸 찾은 경우 true 반환, 실패한 경우 false 반환
+
+    if(!removed) {
+      return "%d번 사람이 존재하지 않습니다.".formatted(id);
+    }
+
+    return "%d번 사람이 삭제되었습니다.".formatted(id);
+  }
+
+  @GetMapping("/home/removePerson/{id}")
+  @ResponseBody
+  public String removePersonPathVariable(@PathVariable int id) {
+    boolean removed = people.removeIf(person -> person.getId() == id);
+
+    if(!removed) {
+      return "%d번 사람이 존재하지 않습니다.".formatted(id);
+    }
+
+    return "%d번 사람이 삭제되었습니다.".formatted(id);
+  }
+
+
   @GetMapping("/home/showPeople")
   @ResponseBody
   public List<Person> showPeople() {
-    return personList;
+    return people;
   }
 }
 
