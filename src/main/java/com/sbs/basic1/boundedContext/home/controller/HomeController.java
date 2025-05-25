@@ -2,6 +2,9 @@ package com.sbs.basic1.boundedContext.home.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -183,4 +186,182 @@ public class HomeController {
 
     return map;
   }
+
+  @GetMapping("/home/returnArticle")
+  @ResponseBody
+  public Article showReturnArticle() {
+    Article article = new Article(1, "제목1", "내용1", "김철수", new ArrayList<>() {{
+      add(1);
+      add(2);
+      add(3);
+    }});
+
+    return article;
+  }
+
+  @GetMapping("/home/returnArticle2")
+  @ResponseBody
+  public Article2 showReturnArticle2() {
+    Article2 article = new Article2(1, "제목1", "내용1", "김철수", new ArrayList<>() {{
+      add(1);
+      add(2);
+      add(3);
+    }});
+
+    return article;
+  }
+
+  @GetMapping("/home/returnArticleMapList")
+  @ResponseBody
+  public List<Map<String, Object>> showReturnArticleMapList() {
+    Map<String, Object> articleMap1 = new LinkedHashMap<>() {{
+      put("id", 1);
+      put("subject", "제목1");
+      put("content", "내용1");
+      put("writerName", "홍길순");
+      put("articleNo", new ArrayList<>() {{
+        add(1);
+        add(2);
+        add(3);
+      }});
+    }};
+
+    Map<String, Object> articleMap2 = new LinkedHashMap<>() {{
+      put("id", 2);
+      put("subject", "제목2");
+      put("content", "내용2");
+      put("writerName", "홍길동");
+      put("articleNo", new ArrayList<>() {{
+        add(4);
+        add(5);
+        add(6);
+      }});
+    }};
+
+    Map<String, Object> articleMap3 = new LinkedHashMap<>() {{
+      put("id", 3);
+      put("subject", "제목3");
+      put("content", "내용3");
+      put("writerName", "임꺽정");
+      put("articleNo", new ArrayList<>() {{
+        add(7);
+        add(8);
+        add(9);
+      }});
+    }};
+
+    List<Map<String, Object>> list = new ArrayList<>();
+    list.add(articleMap1);
+    list.add(articleMap2);
+    list.add(articleMap3);
+
+    return list;
+  }
+
+  @GetMapping("/home/returnArticleList")
+  @ResponseBody
+  public List<Article2> showReturnArticleList() {
+    Article2 article1 = new Article2(1, "제목1", "내용1", "김철수", new ArrayList<>() {{
+      add(1);
+      add(2);
+      add(3);
+    }});
+
+    Article2 article2 = new Article2(2, "제목2", "내용2", "김영희", new ArrayList<>() {{
+      add(4);
+      add(5);
+      add(6);
+    }});
+
+    Article2 article3 = new Article2(3, "제목3", "내용3", "최수영", new ArrayList<>() {{
+      add(7);
+      add(8);
+      add(9);
+    }});
+
+    List<Article2> list = new ArrayList<>();
+    list.add(article1);
+    list.add(article2);
+    list.add(article3);
+
+    return list;
+  }
+}
+
+class Article {
+  public int id;
+  public String subject;
+  public String content;
+  public String writerName;
+  public List<Integer> articleNo;
+
+  public int getId() {
+    return id;
+  }
+
+  public String getSubject() {
+    return subject;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public String getWriterName() {
+    return writerName;
+  }
+
+  public List<Integer> getArticleNo() {
+    return articleNo;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public void setSubject(String subject) {
+    this.subject = subject;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public void setWriterName(String writerName) {
+    this.writerName = writerName;
+  }
+
+  public void setArticleNo(List<Integer> articleNo) {
+    this.articleNo = articleNo;
+  }
+
+  public Article(int id, String subject, String content, String writerName, List<Integer> articleNo) {
+    this.id = id;
+    this.subject = subject;
+    this.content = content;
+    this.writerName = writerName;
+    this.articleNo = articleNo;
+  }
+
+  @Override
+  public String toString() {
+    return "Article{" +
+        "id=" + id +
+        ", subject='" + subject + '\'' +
+        ", content='" + content + '\'' +
+        ", writerName='" + writerName + '\'' +
+        ", articleNo=" + articleNo +
+        '}';
+  }
+}
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
+class Article2 {
+  private int id;
+  private String subject;
+  private String content;
+  private String writerName;
+  private List<Integer> articleNo;
 }
