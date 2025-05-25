@@ -1,8 +1,13 @@
 package com.sbs.basic1.boundedContext.home.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.net.http.HttpRequest;
 
 @Controller
 // '개발자가 스프링부트한테 해당 클래스는 컨트롤러 클래스이다.'라고 전달
@@ -41,5 +46,21 @@ public class HomeController {
   @ResponseBody
   public int showIncrease() {
     return no++;
+  }
+
+  @GetMapping("/home/plus")
+  @ResponseBody
+  public int showPlus(@RequestParam(defaultValue = "0") int a, int b) {
+    // 쿼리 파라미터와 매개변수 이름은 일치해야 한다.
+    // ?a=1&b=2
+    // a와 b는 매개변수 이름
+    // 1과 2는 쿼리 파라미터 값
+
+    // @RequestParam은 쿼리 파라미터를 매개변수로 전달받는다.
+    // @RequestParam은 생략 가능하다.
+    // @RequestParam은 생략하면 쿼리 파라미터와 매개변수 이름이 일치해야 한다.
+
+    // 파라미터 값에 기본값을 주는 경우 @RequestParam(defaultValue = "0") 통해 기본값 지정이 가능하다.
+    return a + b;
   }
 }
