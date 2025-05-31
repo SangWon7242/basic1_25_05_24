@@ -363,6 +363,41 @@ public class HomeController {
     return "%d번 사람이 삭제되었습니다.".formatted(id);
   }
 
+  @GetMapping("/home/modifyPerson")
+  @ResponseBody
+  public String modifyPerson(int id, String name, int age) {
+    /*
+    // v1
+    Person target = null;
+
+    for(Person p : people) {
+      if(p.getId() == id) {
+        target = p;
+        break;
+      }
+    }
+
+    if(target == null) {
+      return "%d번 사람이 존재하지 않습니다.".formatted(id);
+    }
+    */
+
+    // v2
+    Person found = people.stream()
+        .filter(person -> person.getId() == id)
+        .findFirst()
+        .orElse(null); // 없으면 null 리턴
+
+    if(found == null) {
+      return "%d번 사람이 존재하지 않습니다.".formatted(id);
+    }
+
+    found.setName(name);
+    found.setAge(age);
+
+    return "%d번 사람이 수정되었습니다.".formatted(id);
+  }
+
 
   @GetMapping("/home/showPeople")
   @ResponseBody
@@ -454,8 +489,8 @@ class Article2 {
 class Person {
   private static int lastId;
   private final int id;
-  private final String name;
-  private final int age;
+  private String name;
+  private int age;
 
   static {
     lastId = 0;
