@@ -1,5 +1,8 @@
 package com.sbs.basic1.boundedContext.home.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,10 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.util.*;
 
 @Controller
 // '개발자가 스프링부트한테 해당 클래스는 컨트롤러 클래스이다.'라고 전달
@@ -403,6 +404,38 @@ public class HomeController {
   @ResponseBody
   public List<Person> showPeople() {
     return people;
+  }
+
+  @GetMapping("/home/cookie/increase")
+  @ResponseBody
+  public int showCookieIncrease(HttpServletRequest req, HttpServletResponse resp) {
+    // HttpServletRequest req : 받은편지
+    // HttpServletResponse resp : 보낼편지
+
+    int countInCookie = 0;
+
+    if(req.getCookies() != null) {
+      countInCookie = Arrays.stream(req.getCookies())
+          .filter(cookie -> cookie.getName().equals("count"))
+          .map(Cookie::getValue)
+          .mapToInt(Integer::parseInt)
+          .findAny()
+          .orElse(0);
+    }
+
+    int newCountInCookie = countInCookie + 1;
+
+    resp.addCookie(new Cookie("count", newCountInCookie + ""));
+
+    return newCountInCookie;
+  }
+
+  @GetMapping("/home/repAndResp")
+  @ResponseBody
+  public void showReqAndResp(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    int age = Integer.parseInt(req.getParameter("age"));
+
+    resp.getWriter().append("I'm %d years old".formatted(age));
   }
 }
 
