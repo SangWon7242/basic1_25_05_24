@@ -1,5 +1,8 @@
 package com.sbs.basic1.boundedContext.home.controller;
 
+import com.sbs.basic1.boundedContext.member.controller.MemberController;
+import com.sbs.basic1.boundedContext.member.entiry.Member;
+import com.sbs.basic1.boundedContext.member.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,11 +23,21 @@ import java.util.*;
 public class HomeController {
   private int no;
   private List<Person> people;
+  private MemberService memberService;
 
   public HomeController() {
     no = 0;
     people = new ArrayList<>();
+
+    memberService = new MemberService();
   }
+
+  @GetMapping("/home/user1")
+  @ResponseBody
+  public Member showUser1() {
+    return memberService.findByUsername("user1");
+  }
+
 
   @GetMapping("/home/main")
   // 개발자가 스프링부트한테
@@ -296,7 +309,7 @@ public class HomeController {
     people.add(new Person("홍길동", 11));
     people.add(new Person("홍길순", 22));
     people.add(new Person("임꺽정", 33));
-    
+
     return "테스트 케이스 추가";
   }
 
@@ -345,7 +358,7 @@ public class HomeController {
     boolean removed = people.removeIf(person -> person.getId() == id);
     // 조건에 맞는 걸 찾은 경우 true 반환, 실패한 경우 false 반환
 
-    if(!removed) {
+    if (!removed) {
       return "%d번 사람이 존재하지 않습니다.".formatted(id);
     }
 
@@ -357,7 +370,7 @@ public class HomeController {
   public String removePersonPathVariable(@PathVariable int id) {
     boolean removed = people.removeIf(person -> person.getId() == id);
 
-    if(!removed) {
+    if (!removed) {
       return "%d번 사람이 존재하지 않습니다.".formatted(id);
     }
 
@@ -389,7 +402,7 @@ public class HomeController {
         .findFirst()
         .orElse(null); // 없으면 null 리턴
 
-    if(found == null) {
+    if (found == null) {
       return "%d번 사람이 존재하지 않습니다.".formatted(id);
     }
 
@@ -414,7 +427,7 @@ public class HomeController {
 
     int countInCookie = 0;
 
-    if(req.getCookies() != null) {
+    if (req.getCookies() != null) {
       countInCookie = Arrays.stream(req.getCookies())
           .filter(cookie -> cookie.getName().equals("count"))
           .map(Cookie::getValue)
