@@ -5,7 +5,9 @@ import com.sbs.basic1.boundedContext.member.entiry.Member;
 import com.sbs.basic1.boundedContext.member.repository.MemberRepository;
 import org.springframework.stereotype.Service;
 
+// @Service : 가독성과 맥락을 이해하기 위해 표기
 @Service
+// @Component // 컴포넌트가 붙은 클래스는 IOC 컨테이너에 의해 생상소멸이 관리된다.
 public class MemberService {
   private MemberRepository memberRepository;
 

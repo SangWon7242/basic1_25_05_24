@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,13 +25,15 @@ import java.util.*;
 public class HomeController {
   private int no;
   private List<Person> people;
+
+  // 필드 주입
+  @Autowired
+  // memberService 변수에 IOC 컨테이너에 의해 생성된 객체가 연결됨
   private MemberService memberService;
 
   public HomeController() {
     no = 0;
     people = new ArrayList<>();
-
-    memberService = new MemberService();
   }
 
   @GetMapping("/home/user1")
@@ -37,8 +41,7 @@ public class HomeController {
   public Member showUser1() {
     return memberService.findByUsername("user1");
   }
-
-
+  
   @GetMapping("/home/main")
   // 개발자가 스프링부트한테
   // 만약에 '/home/main'이라는 요청이 들어오면
