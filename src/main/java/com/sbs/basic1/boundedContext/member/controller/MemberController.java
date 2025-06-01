@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @AllArgsConstructor
@@ -25,6 +26,41 @@ public class MemberController {
   */
 
   @GetMapping("/member/login")
+  @ResponseBody
+  public String login() {
+    if(rq.isLogined()) {
+      return """
+          <script>
+            alert("이미 로그인 되어있습니다.");
+          </script>
+          """;
+    }
+
+    return """
+        <div class="form-container">
+        	<h1>🔗 로그인</h1>
+        
+        	<form id="urlGeneratorForm" method="POST" action="login">
+        
+        		<div class="form-group">
+        			<label for="username">로그인아이디</label>
+        			<input type="text" id="username" name="username" placeholder="로그인 아이디를 입력해주세요.">
+        		</div>
+        
+        		<div class="form-group">
+        			<label for="password">비밀번호</label>
+        			<input type="password" id="password" name="password" placeholder="비밀번호를 입력해주세요.">
+        		</div>
+        
+        		<div class="form-group">
+        			<button type="submit">📋 로그인</button>
+        		</div>
+        	</form>
+        </div>
+        """;
+  }
+
+  @PostMapping("/member/login")
   @ResponseBody
   public RsData login(String username, String password, HttpServletRequest req, HttpServletResponse resp) {
     if(username.trim().isEmpty()) {
