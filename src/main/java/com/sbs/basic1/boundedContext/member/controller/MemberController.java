@@ -7,7 +7,6 @@ import com.sbs.basic1.boundedContext.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -40,7 +39,7 @@ public class MemberController {
 
     if(rsData.isSuccess()) {
       Member member = (Member) rsData.getData();
-      rq.setCookie("loginedMemberId", member.getId());
+      rq.setSession("loginedMemberId", member.getId());
     }
 
     return rsData;
@@ -49,7 +48,7 @@ public class MemberController {
   @GetMapping("/member/logout")
   @ResponseBody
   public RsData logout(HttpServletRequest req, HttpServletResponse resp) {
-    boolean cookieRemoved = rq.removeCookie("loginedMemberId");
+    boolean cookieRemoved = rq.removeSession("loginedMemberId");
 
     if(!cookieRemoved) {
       return RsData.of("F-1", "이미 로그아웃 상태입니다.");
@@ -61,7 +60,7 @@ public class MemberController {
   @GetMapping("/member/me")
   @ResponseBody
   public RsData showMe(HttpServletRequest req, HttpServletResponse resp) {
-    long loginedMemberId = rq.getCookieAsLong("loginedMemberId", 0);
+    long loginedMemberId = rq.getSessionAsLong("loginedMemberId", 0);
 
     boolean isLogined = loginedMemberId > 0;
 
@@ -72,5 +71,11 @@ public class MemberController {
     Member member = memberService.findById(loginedMemberId);
 
     return RsData.of("S-1", "당신의 username(은)는 '%s' 입니다.".formatted(member.getUsername()));
+  }
+
+  @GetMapping("/member/session")
+  @ResponseBody
+  public String showSession() {
+    return rq.getSessionDebugInfo().replaceAll("\n", "<br>");
   }
 }
