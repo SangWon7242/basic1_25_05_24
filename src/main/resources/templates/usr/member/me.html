@@ -1,0 +1,15 @@
+<meta charset="UTF-8">
+
+<h1>회원 정보</h1>
+<div th:if="${member == null}">
+  로그인 정보가 없습니다.
+</div>
+
+<div th:if="${member != null}">
+  <div>
+    회원번호 : [[${member?.id}]]
+  </div>
+  <div>
+    아이디 : [[${member?.username}]]
+  </div>
+</div>
