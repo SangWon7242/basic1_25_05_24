@@ -7,9 +7,13 @@
 
 <div th:if="${member != null}">
   <div>
-    회원번호 : [[${member?.id}]]
+    <span>회원번호</span>
+    :
+    <span th:text="${member?.id}"></span>
   </div>
   <div>
-    아이디 : [[${member?.username}]]
+    <span>로그인아이디</span>
+    :
+    <span th:text="${member?.username}"></span>
   </div>
 </div>
